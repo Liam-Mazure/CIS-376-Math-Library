@@ -1,6 +1,6 @@
 import math
 
-class Vector2():
+class Vector3():
     def __init__(self, x, y, z, w):
         self.x = x
         self.y = y
@@ -11,7 +11,7 @@ class Vector2():
             x = self.y * other.z - self.z * other.y
             y = self.z * other.x - self.x * other.z
             z = self.x * other.y - self.y * other.x
-            return Vector2(x, y, z, self.w)
+            return Vector3(x, y, z, self.w)
 
     def dot_product(self, other):
         return self.x * other.x + self.y * other.y + self.z * other.z
@@ -31,19 +31,19 @@ class Vector2():
         y = self.y + other.y
         z = self.z + other.z
         w = self.w + other.w
-        return Vector2(x, y, z, w)
+        return Vector3(x, y, z, w)
 
     def sub_vec(self, other):
             x = self.x - other.x
             y = self.y - other.y
             z = self.z - other.z
-            return Vector2(x, y, z, self.w)
+            return Vector3(x, y, z, self.w)
     
     def normalize(self):
         magnitude = self.mag_with()
         if magnitude == 0:
-            return Vector2(0, 0, 0, self.w)
-        return Vector2(self.x / magnitude, self.y / magnitude, self.z / magnitude, self.w)
+            return Vector3(0, 0, 0, self.w)
+        return Vector3(self.x / magnitude, self.y / magnitude, self.z / magnitude, self.w)
 
     def mag_with(self):
         return math.sqrt(self.x**2 + self.y**2 + self.z**2 + self.w**2)
@@ -54,39 +54,46 @@ class Vector2():
     def same_vec(self, other):
         return self.x == other.x and self.y == other.y and self.z == other.z and self.w == other.w
 
-class Vector3():
-    def __init__(self, x, y, z, w):
+class Vector2():
+    def __init__(self, x, y, w):
         self.x = x
         self.y = y
-        self.z = z
         self.w = w
 
-    def cross_product(self):
-        pass
+    def cross_product(self, other):
+         return self.x * other.y - self.y * other.x
 
-    def dot_product(self):
-        pass
+    def dot_product(self, other):
+        return self.x * other.x + self.y * other.y
 
-    def angle_between(self):
-        pass
+    def angle_between(self, other):
+        dot = self.dot_product(other)
+        a_mag = self.mag_with()
+        b_mag = self.mag_with_out()
 
-    def add_vec(self):
-        pass
+        angle = math.acos(dot / a_mag * b_mag)
+        return angle
 
-    def sub_vec(self):
-        pass
+    def add_vec(self, other):
+        return Vector2(self.x + other.x, self.y + other.y)
+
+    def sub_vec(self, other):
+        return Vector2(self.x - other.x, self.y - other.y)
     
     def normalize(self):
-        pass
+        magnitude = self.mag_with()
+        if magnitude == 0:
+            return Vector2(0, 0, self.w)
+        return Vector2(self.x / magnitude, self.y / magnitude)
 
     def mag_with(self):
-        pass
+        return math.sqrt(self.x**2 + self.y**2)
 
     def mag_with_out(self):
-        pass
+        return self.x**2 + self.y**2
 
-    def same_vec(self):
-        pass
+    def same_vec(self, other):
+        return self.x == other.x and self.y == other.y
 
 class Matrix():
     def __init__(self, i, j):
