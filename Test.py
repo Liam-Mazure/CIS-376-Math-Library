@@ -95,9 +95,9 @@ class TestVector3(unittest.TestCase):
         v = Vector3(3, 4, 5, 0)
         result = v.normalize()
         self.assertAlmostEqual(1, result.mag_with())
-        self.assertAlmostEqual(3 / math.sqrt(50), result.x)
-        self.assertAlmostEqual(4 / math.sqrt(50), result.y)
-        self.assertAlmostEqual(5 / math.sqrt(50), result.z)
+        self.assertAlmostEqual(3 / v.mag_with(), result.x)
+        self.assertAlmostEqual(4 / v.mag_with(), result.y)
+        self.assertAlmostEqual(5 / v.mag_with(), result.z)
 
     def test_magnitude(self):
         v = Vector3(1,2,3,0)
@@ -144,8 +144,8 @@ class TestVector2(unittest.TestCase):
         self.assertAlmostEqual(0, result)
 
     def test_angle_between(self):
-        v1 = Vector3(1, 2, 0)
-        v2 = Vector3(3, 4, 0)
+        v1 = Vector2(1, 2, 0)
+        v2 = Vector2(3, 4, 0)
         result = v1.angle_between(v2)
 
         dot_product = v1.dot_product(v2)
@@ -162,8 +162,8 @@ class TestVector2(unittest.TestCase):
         self.assertAlmostEqual(0, result)
 
     def test_angle_between_parallel_vectors(self):
-        v1 = Vector2(1, 2,0)
-        v2 = Vector2(3, 4,0)
+        v1 = Vector2(1, 2, 0)
+        v2 = Vector2(2, 4, 0)
         result = v1.angle_between(v2)
 
         self.assertAlmostEqual(0, result)
@@ -197,8 +197,8 @@ class TestVector2(unittest.TestCase):
         v = Vector2(3, 4, 0)
         result = v.normalize()
         self.assertAlmostEqual(1, result.mag_with())
-        self.assertAlmostEqual(3 / math.sqrt(50), result.x)
-        self.assertAlmostEqual(4 / math.sqrt(50), result.y)
+        self.assertAlmostEqual(3 / v.mag_with(), result.x)
+        self.assertAlmostEqual(4 / v.mag_with(), result.y)
 
     def test_magnitude(self):
         v = Vector2(1,2,0)
@@ -211,6 +211,48 @@ class TestVector2(unittest.TestCase):
         v3 = Vector2(4, 5, 0)
         self.assertTrue(v1.same_vec(v2))
         self.assertFalse(v1.same_vec(v3))
+
+class TestMatrix(unittest.TestCase):
+    def test_init(self):
+        data = [[1, 2, 3], [4, 5, 6]]
+        mtx = Matrix(data)
+        self.assertEqual((2, 3), mtx.shape())
+        self.assertEqual(data, mtx.data)
+
+    def test_add_mtx(self):
+        mtx1 = Matrix([[1, 2, 3], [4, 5, 6]])
+        mtx2 = Matrix([[6, 5, 4], [3, 2, 1]])
+        result = mtx1.add_mtx(mtx2)
+        expected = [[7, 7, 7], [7, 7, 7]]
+        self.assertEqual(expected, result)
+
+    def test_sub_mtx(self):
+        mtx1 = Matrix([[1, 2, 3], [4, 5, 6]])
+        mtx2 = Matrix([[6, 5, 4], [3, 2, 1]])
+        result = mtx1.sub_mtx(mtx2)
+        expected = [[-5, -3, -1], [1, 3, 5]]
+        self.assertEqual(expected, result)
+
+    def test_mult_by_vec(self):
+        mtx = Matrix([[1, 2, 3], [4, 5, 6]])
+        vec = [1, 2, 3]
+        result = mtx.mult_by_vec(vec)
+        expected = [14, 32]
+        self.assertEqual(expected, result)
+
+    def test_mult_by_mtx(self):
+        mtx1 = Matrix([[1, 2, 3], [4, 5, 6]])
+        mtx2 = Matrix([[6, 5], [4, 3], [2, 1]])
+        result = mtx1.mult_by_mtx(mtx2)
+        expected = [[20, 14], [56, 41]]
+        self.assertEqual(expected, result)
+
+    def test_same_mtx(self):
+        mtx1 = Matrix([[1, 2, 3], [4, 5, 6]])
+        mtx2 = Matrix([[1, 2, 3], [4, 5, 6]])
+        mtx3 = Matrix([[1, 2, 3], [4, 5, 7]])
+        self.assertTrue(mtx1.same_mtx(mtx2))
+        self.assertFalse(mtx1.same_mtx(mtx3))
 
 
 if __name__ == '__main__':

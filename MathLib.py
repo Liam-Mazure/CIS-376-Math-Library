@@ -19,7 +19,6 @@ class Vector3():
     def angle_between(self, other):
         dot_product = self.dot_product(other)
         magnitude_product = self.mag_with() * other.mag_with()
-
         if magnitude_product == 0:
             return 0
 
@@ -69,12 +68,17 @@ class Vector2():
         return self.x * other.x + self.y * other.y
 
     def angle_between(self, other):
+        if self.x == 0 and self.y == 0:
+            return 0
+        if other.x == 0 and other.y == 0:
+            return 0
+
         dot = self.dot_product(other)
         a_mag = self.mag_with()
-        b_mag = self.mag_with_out()
+        b_mag = other.mag_with()
 
-        angle = math.acos(min(1, max(dot / a_mag * b_mag)))
-    
+        angle = math.acos(min(1, max(-1, dot / (a_mag * b_mag))))
+
         return angle
 
     def add_vec(self, other):
@@ -117,7 +121,7 @@ class Matrix():
             row = []
             for j in range(self.cols):
                 row.append(self.data[i][j] + other.data[i][j])
-                result.append(row)
+            result.append(row)
         
         return result
 
@@ -131,7 +135,7 @@ class Matrix():
             row = []
             for j in range(self.cols):
                 row.append(self.data[i][j] - other.data[i][j])
-                result.append(row)
+            result.append(row)
         
         return result
 
@@ -149,17 +153,16 @@ class Matrix():
 
         return result
 
-    def mult_by_mtx(self,other):
-        if self.shape() != other.shape():
-            raise ValueError("Matrcies must be the same size")
-        
-        result = []
+    def mult_by_mtx(self, other):
+        if self.cols != other.rows:
+            raise ValueError("The number of columns in the first matrix must be the same as the number of rows in the second matrix")
 
+        result = []
         for i in range(self.rows):
             row = []
-            for j in range(self.cols):
-                total = 0
-                for k in range(self.cols):
+            for j in range(other.cols):
+                sum = 0
+                for k in range(other.rows):
                     sum += self.data[i][k] * other.data[k][j]
                 row.append(sum)
             result.append(row)
@@ -174,5 +177,4 @@ class Matrix():
             for j in range(self.cols):
                 if self.data[i][j]  != other.data[i][j]:
                     return False
-        
         return True
