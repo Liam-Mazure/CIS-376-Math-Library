@@ -1,5 +1,5 @@
 
-# Author: Cole Blunt, Liam
+# Author: Cole Blunt, Liam Mazure
 # Date: 2/13/2023
 # Description: code contains math for vercors and a 4x4 matrix,
 # a Vector3 class for 3d vectors
